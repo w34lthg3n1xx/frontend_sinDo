@@ -257,8 +257,8 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  letterSpacing: 0.5,
+                  fontSize: 30,
+                  letterSpacing: 0.7,
                 ),
               ),
             ],

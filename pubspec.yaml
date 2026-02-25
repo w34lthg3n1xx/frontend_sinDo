@@ -88,6 +88,12 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
+  fonts:
+    - family: times
+      fonts:
+        - asset: assets/times.ttf
+        #- asset: assets/fonts/times_bold.ttf
+          weight: 700
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 

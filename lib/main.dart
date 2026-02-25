@@ -45,13 +45,13 @@ class MyApp extends StatelessWidget {
       useMaterial3: true,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: backgroundColor,
-      fontFamily: 'Roboto', // Police sobre et moderne
+      fontFamily: 'times', // Police sobre et moderne
 
       // Styles de texte
       textTheme: Theme.of(context).textTheme.apply(
             bodyColor: onTextColor,
             displayColor: onTextColor,
-            fontFamily: 'Roboto',
+            fontFamily: 'times',
           ),
 
       // Style des cartes
