@@ -7,7 +7,7 @@ import '../models/api_response.dart';
 
 class ApiService {
   // Replace with your actual backend URL
-  static const String _baseUrl = 'https://YOUR_BACKEND_URL/analyze';
+  static const String _baseUrl = 'http://192.168.1.9:8000/analyze';
 
   Future<ApiResponse> analyze(
       {String? text, File? file, String? videoUrl}) async {

@@ -218,7 +218,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                           message,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 12,
+                            fontSize: 14,
                             fontWeight: FontWeight.w400,
                           ),
                           maxLines: 1,
@@ -569,7 +569,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         ),
         const SizedBox(height: 16),
         const Text(
-          "© 2026 Gouvernement du Bénin. Tous droits réservés.",
+          "© 2026 Gouvernement du Bénin. Tous droits réservés.\n                Service supporté par l'ASIN",
           style: TextStyle(color: Colors.grey, fontSize: 12),
         ),
         const SizedBox(height: 8),
