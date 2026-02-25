@@ -49,7 +49,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
     _bannerController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 20),
+      duration: const Duration(seconds: 25),
     )..repeat();
   }
 
@@ -195,10 +195,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   Widget _buildMarqueeBanner() {
     const String message =
         "Les contenus diffusés via cette application sont fournis à titre informatif uniquement. Aucune garantie n’est donnée quant à leur exactitude ou exhaustivité.";
-    final Color bannerColor = Color.lerp(Theme.of(context).colorScheme.primary, Colors.black, 0.15)!;
+    final Color bannerColor = Color.lerp(Theme.of(context).colorScheme.primary, Colors.black, 0.2)!;
 
     return Container(
-      height: 32,
+      height: 30,
       width: double.infinity,
       color: bannerColor,
       child: AnimatedBuilder(
@@ -210,15 +210,15 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 return Stack(
                   children: [
                     Positioned(
-                      left: constraints.maxWidth - (_bannerController.value * (constraints.maxWidth + 900)),
+                      left: constraints.maxWidth - (_bannerController.value * (constraints.maxWidth + 1000)),
                       child: Container(
-                        height: 32,
+                        height: 30,
                         alignment: Alignment.center,
-                        child: Text(
+                        child: const Text(
                           message,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
-                            fontSize: 13,
+                            fontSize: 12,
                             fontWeight: FontWeight.w400,
                           ),
                           maxLines: 1,
@@ -240,31 +240,32 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
+          Row(
             children: [
               SizedBox(
-                width: 50,
-                height: 50,
+                width: 45,
+                height: 45,
                 child: Image.asset(
                   'assets/armoirie_gov.png',
                   fit: BoxFit.contain,
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(width: 12),
               const Text(
                 "Sin Dò",
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 20,
+                  letterSpacing: 0.5,
                 ),
               ),
             ],
           ),
           IconButton(
-            icon: Icon(Icons.delete_outline_rounded, color: Theme.of(context).colorScheme.primary),
+            icon: Icon(Icons.delete_outline_rounded,
+                color: Theme.of(context).colorScheme.primary),
             onPressed: _clearAll,
             tooltip: 'Effacer la session',
           ),
@@ -504,7 +505,10 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           const Divider(height: 16),
           Text(
