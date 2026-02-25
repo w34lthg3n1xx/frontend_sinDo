@@ -18,7 +18,7 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateMixin {
+class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final _textController = TextEditingController();
   final _videoUrlController = TextEditingController();
   final _apiService = ApiService();
@@ -32,6 +32,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
   bool _isUrlFieldVisible = false;
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+  late AnimationController _bannerController;
 
   @override
   void initState() {
@@ -45,6 +46,11 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
       parent: _animationController,
       curve: Curves.easeInOut,
     );
+
+    _bannerController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 20),
+    )..repeat();
   }
 
   void _resetClearTimer() {
@@ -149,12 +155,16 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
         ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            children: [
-              _buildHeader(),
-              Expanded(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: _buildHeader(),
+            ),
+            _buildMarqueeBanner(),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -171,10 +181,56 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
                   ),
                 ),
               ),
-              _buildFooter(),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: _buildFooter(),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildMarqueeBanner() {
+    const String message =
+        "Les contenus diffusés via cette application sont fournis à titre informatif uniquement. Aucune garantie n’est donnée quant à leur exactitude ou exhaustivité.";
+    final Color bannerColor = Color.lerp(Theme.of(context).colorScheme.primary, Colors.black, 0.15)!;
+
+    return Container(
+      height: 32,
+      width: double.infinity,
+      color: bannerColor,
+      child: AnimatedBuilder(
+        animation: _bannerController,
+        builder: (context, child) {
+          return ClipRect(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return Stack(
+                  children: [
+                    Positioned(
+                      left: constraints.maxWidth - (_bannerController.value * (constraints.maxWidth + 900)),
+                      child: Container(
+                        height: 32,
+                        alignment: Alignment.center,
+                        child: Text(
+                          message,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          maxLines: 1,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }
@@ -184,20 +240,31 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 90,
-            height: 90,
-            child: Image.asset(
-              'assets/armoirie_gov.png',
-              fit: BoxFit.contain,
-             // errorBuilder: (context, error, stackTrace) =>
-             //     const Icon(Icons.shield_rounded, size: 40),
-            ),
+          Column(
+            children: [
+              SizedBox(
+                width: 50,
+                height: 50,
+                child: Image.asset(
+                  'assets/armoirie_gov.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                "Sin Dò",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
           ),
           IconButton(
-            icon: Icon(Icons.delete_outline_rounded,
-                color: Theme.of(context).colorScheme.primary),
+            icon: Icon(Icons.delete_outline_rounded, color: Theme.of(context).colorScheme.primary),
             onPressed: _clearAll,
             tooltip: 'Effacer la session',
           ),
@@ -217,9 +284,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
             IconButton(
               icon: Icon(
                 Icons.link_rounded,
-                color: _isUrlFieldVisible
-                    ? Theme.of(context).colorScheme.primary
-                    : Colors.grey,
+                color: _isUrlFieldVisible ? Theme.of(context).colorScheme.primary : Colors.grey,
               ),
               tooltip: 'Ajouter une URL de vidéo',
               onPressed: () {
@@ -324,7 +389,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
     final fileSize = _formatBytes(file.lengthSync());
 
     return Card(
-      color: const Color(0xFFE8F5E9), // Vert très clair
+      color: const Color(0xFFE8F5E9),
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -439,10 +504,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
         children: [
           Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge
-                ?.copyWith(color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.primary),
           ),
           const Divider(height: 16),
           Text(
@@ -517,6 +579,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
     _videoUrlController.dispose();
     _autoClearTimer?.cancel();
     _animationController.dispose();
+    _bannerController.dispose();
     super.dispose();
   }
 }
